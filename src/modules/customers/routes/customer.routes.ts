@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import ProductsController from '../controllers/ProductsController';
-
-const productsRouter = Router();
-const controller = new ProductsController();
 import { celebrate, Joi, Segments } from 'celebrate';
+import CustomerController from '../controllers/CustomersController';
+import isAuthenticated from '@shared/http/middlewares/isAuhenticated';
 
-productsRouter.get('/', controller.index);
+const customersRouter = Router();
+const controller = new CustomerController();
 
-productsRouter.get(
+customersRouter.use(isAuthenticated);
+
+customersRouter.get('/', controller.index);
+
+customersRouter.get(
     '/:id',
     celebrate({
         [Segments.PARAMS]: {
@@ -17,19 +20,18 @@ productsRouter.get(
     controller.show,
 );
 
-productsRouter.post(
+customersRouter.post(
     '/',
     celebrate({
         [Segments.BODY]: {
             name: Joi.string().required(),
-            price: Joi.number().precision(2).required(),
-            quantity: Joi.number().required(),
+            email: Joi.string().email().required(),
         },
     }),
     controller.create,
 );
 
-productsRouter.put(
+customersRouter.put(
     '/:id',
     celebrate({
         [Segments.PARAMS]: {
@@ -37,14 +39,13 @@ productsRouter.put(
         },
         [Segments.BODY]: {
             name: Joi.string().required(),
-            price: Joi.number().precision(2).required(),
-            quantity: Joi.number().required(),
+            email: Joi.string().email().required(),
         },
     }),
     controller.update,
 );
 
-productsRouter.delete(
+customersRouter.delete(
     '/:id',
     celebrate({
         [Segments.PARAMS]: {
@@ -54,4 +55,4 @@ productsRouter.delete(
     controller.delete,
 );
 
-export default productsRouter;
+export default customersRouter;
