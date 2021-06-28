@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 import OrdersController from '../controllers/OrdersController';
+import isAuthenticated from '@shared/http/middlewares/isAuhenticated';
 
 const ordersRouter = Router();
-const controller = new OrdersController();
+const ordersController = new OrdersController();
+
+ordersRouter.use(isAuthenticated);
 
 ordersRouter.get(
     '/:id',
@@ -12,7 +15,7 @@ ordersRouter.get(
             id: Joi.string().uuid().required(),
         },
     }),
-    controller.show,
+    ordersController.show,
 );
 
 ordersRouter.post(
@@ -23,7 +26,7 @@ ordersRouter.post(
             products: Joi.required(),
         },
     }),
-    controller.create,
+    ordersController.create,
 );
 
 export default ordersRouter;

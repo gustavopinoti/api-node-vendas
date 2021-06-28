@@ -1,14 +1,15 @@
 import { Product } from '@modules/products/typeorm/entities/Product';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
 import Order from './Order';
 
 @Entity('orders_products')
-export default class OrdersProducts {
+class OrdersProducts {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @ManyToOne(() => Order, order => order.order_products)
-    @JoinColumn({ name: 'customer_id' })
+    @JoinColumn({ name: 'order_id' })
     order: Order;
 
     @ManyToOne(() => Product, product => product.order_products)
@@ -33,3 +34,5 @@ export default class OrdersProducts {
     @UpdateDateColumn()
     updated_at: Date;
 }
+
+export default OrdersProducts;
