@@ -4,6 +4,7 @@ import DeleteCustomereService from '../../../services/DeleteCustomerService';
 import ListCustomerService from '../../../services/ListCustomerService';
 import ShowCustomereService from '../../../services/ShowCustomerService';
 import UpdateCustomerService from '../../../services/UpdateCustomerService';
+import { container } from 'tsyringe';
 
 export default class CustomerController {
     public async index(request: Request, response: Response): Promise<Response> {
@@ -26,7 +27,7 @@ export default class CustomerController {
     public async create(request: Request, response: Response): Promise<Response> {
         const { name, email } = request.body;
 
-        const createCustomer = new CreateCustomerService();
+        const createCustomer = container.resolve(CreateCustomerService);
 
         const customer = await createCustomer.execute({ name, email });
 
